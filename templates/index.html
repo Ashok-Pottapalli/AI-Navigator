@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Navigator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+
+  <!-- ══ CSS FILES ══ -->
+  <link rel="stylesheet" href="/static/css/base.css"/>
+  <link rel="stylesheet" href="/static/css/components.css"/>
+  <link rel="stylesheet" href="/static/css/pages.css"/>
+  <link rel="stylesheet" href="/static/css/file_upload.css"/>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     HAMBURGER MENU DRAWER
+══════════════════════════════════════ -->
+<div class="menu-drawer-overlay" id="menuDrawerOverlay"></div>
+<div class="menu-drawer" id="menuDrawer">
+  <h3>Version 1.0.0</h3>
+  <a href="#" class="menu-link">📄 Release document</a>
+  <a href="#" class="menu-link">📖 User manual</a>
+  <a href="#" class="menu-link">💬 Feedback form</a>
+</div>
+
+<!-- ══════════════════════════════════════
+     SIDEBAR OVERLAY
+══════════════════════════════════════ -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- ══════════════════════════════════════
+     HEADER
+══════════════════════════════════════ -->
+<header>
+  <div class="header-content">
+    <div class="hdr-left">
+      <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <img src="/static/Logo-White.png" alt="Logo" class="hdr-logo" onerror="this.style.display='none'"/>
+    </div>
+    <div class="hdr-center">
+      <div class="hdr-title">AI Navigator</div>
+    </div>
+
+    <div class="hdr-right-col">
+        <div class="hdr-menu-wrap" id="hdrMenuWrap">
+            <button class="hdr-toggle-btn" id="hdrToggleBtn" aria-label="Menu">
+            <div class="hdr-profile-circle">
+                <svg class="hdr-profile-svg" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+            </div>
+            </button>
+            <div class="hdr-dropdown" id="hdrDropdown">
+            <button class="hdr-drop-item disabled-item" disabled>
+                <span>ℹ️</span> About
+            </button>
+            <button class="hdr-drop-item" id="dropFileUpload">
+                <span>📂</span> File Upload
+            </button>
+            <button class="hdr-drop-item" id="dropPolicyUpload">
+                <span>📋</span> Upload Policy
+            </button>
+            <button class="hdr-drop-item disabled-item" disabled>
+                <span>✉️</span> Contact
+            </button>
+            </div>
+        </div>
+</div>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════
+     TAB NAVIGATION
+══════════════════════════════════════ -->
+<nav class="tab-navigation">
+  <div class="tab-nav-inner">
+    <button class="nav-tab active" data-page="home">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+      Home
+    </button>
+    <button class="nav-tab" data-page="promptlibrary">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+      </svg>
+      Scenario Library
+    </button>
+    <button class="nav-tab" data-page="tools">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+        <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+      </svg>
+      AI Tools
+    </button>
+    <button class="nav-tab" data-page="history">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+      </svg>
+      History
+    </button>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     SIDEBAR
+══════════════════════════════════════ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-inner">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Navigation</div>
+      <button class="sidebar-item" data-page="analytics">📊 Analytics</button>
+      <a href="#" class="menu-link">📄 Release document</a>
+      <a href="#" class="menu-link">📖 User manual</a>
+      <a href="#" class="menu-link">💬 Feedback form</a>      
+    </div>
+    <!-- <div class="sidebar-section">
+      <div class="sidebar-label">Quick Stats</div>
+      <div class="sidebar-stat">
+        <span class="sidebar-stat-label">Total Runs</span>
+        <span class="sidebar-stat-val" id="sbTotalRuns">—</span>
+      </div>
+      <div class="sidebar-stat">
+        <span class="sidebar-stat-label">Avg Rating</span>
+        <span class="sidebar-stat-val" id="sbAvgRating">—</span>
+      </div>
+      <div class="sidebar-stat">
+        <span class="sidebar-stat-label">Policies</span>
+        <span class="sidebar-stat-val" id="sbPolicies">—</span>
+      </div> -->
+    </div>
+  </div>
+</aside>
+
+<!-- ══════════════════════════════════════
+     MAIN CONTENT
+══════════════════════════════════════ -->
+<main class="main" id="mainContent">
+
+  <!-- ── HOME PAGE ── -->
+  <section class="page active" id="page-home">
+    <div class="home-layout">
+
+      <!-- LEFT COLUMN: Input Form -->
+      <aside>
+        <div class="card">
+          <div class="card-hd">
+            <span class="card-hd-title">⚡ Quick Prompt Generator</span>
+          </div>
+          <div class="card-bd">
+
+            <!-- <div id="safetyBanner" class="safety-banner ok">
+              <span>✓</span>
+              <div>
+                <strong id="safetyTitle">Safe to proceed</strong>
+                <span id="safetyText">Use approved tools only. Do not include credentials or confidential data.</span>
+              </div>
+            </div> -->
+
+            <label class="field-label" for="selRole">Your Role</label>
+            <select id="selRole">
+              <option value="consultant">Consultant / Manager</option>
+              <option value="executive">Executive / Director</option>
+              <option value="developer">Developer / Technical</option>
+              <option value="analyst">Business Analyst</option>
+              <option value="sales">Sales / BD</option>
+              <option value="marketing">Marketing / Comms</option>
+              <option value="hr">HR / People Ops</option>
+              <option value="finance">Finance / Accounting</option>
+            </select>
+
+            <div class="row2">
+              <div>
+                <label class="field-label" for="selTaskType">Task Type</label>
+                <select id="selTaskType">
+                  <option value="research">Research & Analysis</option>
+                  <option value="writing">Writing & Docs</option>
+                  <option value="strategy">Strategy & Planning</option>
+                  <option value="data">Data Analysis</option>
+                  <option value="code">Code & Dev</option>
+                  <option value="creative">Creative Content</option>
+                  <option value="communication">Communication</option>
+                  <option value="learning">Learning & Training</option>
+                  <option value="automate">Process Automation</option>
+                  <option value="decision">Decision Support</option>
+                </select>
+              </div>
+              <!-- <div>
+                <label class="field-label" for="selSensitivity">Data Sensitivity</label>
+                <select id="selSensitivity">
+                  <option value="general">General / Public</option>
+                  <option value="internal">Internal / Company</option>
+                  <option value="client">Client / Confidential</option>
+                </select>
+              </div> -->
+            </div>
+
+            <label class="field-label" for="userInput">What do you need help with?</label>
+            <p class="field-hint">Be specific — mention the system, industry, or format you need.</p>
+            <textarea id="userInput" placeholder="e.g. Draft a Q4 business proposal for our banking client highlighting our SAP integration capabilities…" rows="5"></textarea>
+
+            <div class="hint-box">💡 Your Role &amp; Task Type are sent to the AI model to generate a more relevant, policy-aware response.</div>
+
+            <div class="step-bottom" style="margin-top:14px;">
+              <span class="char-count"><span id="charCount">0</span> chars</span>
+              <button class="btn btn-primary" id="btnGenerate">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                Generate Response
+              </button>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- RIGHT COLUMN: Steps -->
+      <div>
+        <div class="step-indicators">
+          <div class="step-ind active" id="step-ind-1"><div class="step-num">1</div> Describe</div>
+          <div class="step-ind" id="step-ind-2"><div class="step-num">2</div> Classify</div>
+          <div class="step-ind" id="step-ind-3"><div class="step-num">3</div> Result</div>
+        </div>
+
+        <!-- STEP 1: Waiting -->
+        <div class="step-panel active" id="step-1">
+          <div class="card">
+            <div class="card-bd">
+              <div class="empty-state" style="padding:60px 20px">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                <p style="font-size:15px;font-weight:700;color:var(--text2);margin-bottom:6px">Ready to generate</p>
+                <p>Fill in your role, task type, sensitivity and describe your task — then click <strong>Generate Prompt</strong>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: Processing -->
+        <div class="step-panel" id="step-2">
+          <div class="card">
+            <div class="card-bd">
+              <div class="processing-wrap">
+                <div class="proc-icon">
+                  <div class="proc-ring"></div>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </div>
+                <div class="proc-steps" id="processingSteps">
+                  <div class="proc-step" id="proc-1"><div class="proc-dot"></div><span>Classifying intent &amp; industry…</span></div>
+                  <div class="proc-step" id="proc-2"><div class="proc-dot"></div><span>Matching role &amp; task context…</span></div>
+                  <div class="proc-step" id="proc-3"><div class="proc-dot"></div><span>Recommending best AI tool…</span></div>
+                  <div class="proc-step" id="proc-4"><div class="proc-dot"></div><span>Retrieving company policies…</span></div>
+                  <div class="proc-step" id="proc-5"><div class="proc-dot"></div><span>Building optimised prompt…</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: Result -->
+        <div class="step-panel" id="step-3">
+          <div class="card">
+            <div class="card-bd">
+
+              <div id="policyBlockedBox" style="display:none"></div>
+
+              <div class="result-meta" id="resultMeta"></div>
+              <div id="toolRecBox"></div>
+              <div id="policyFlagsBox"></div>
+              <div id="alternativesBox"></div>
+
+              <div class="output-tabs">
+                <button class="output-tab active" data-out="prompt">📝 CORLO Prompt</button>
+                <button class="output-tab" data-out="policies">🛡️ Policies Applied</button>
+              </div>
+
+              <div class="output-panel active" id="out-prompt">
+              <div id="revisedBanner" class="revised-banner" style="display:none"></div>
+              <!-- Edit / Copy / Save toolbar -->
+              <div id="promptToolbar" style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+                <button class="btn btn-secondary btn-sm" id="btnEditPrompt">&#9998; Edit</button>
+                <button class="btn btn-secondary btn-sm" id="btnCopyPrompt">&#128203; Copy</button>
+                <button class="btn btn-secondary btn-sm" id="btnSavePrompt">&#9733; Save to Favorites</button>
+              </div>
+
+              <div class="output-content code-block" id="resultPrompt"></div>
+
+              <!-- Edit mode textarea — hidden by default -->
+              <textarea id="promptEditArea" style="display:none;width:100%;min-height:340px;padding:14px;font-family:var(--mono);font-size:12px;line-height:1.5;border:2px solid var(--primary);border-radius:var(--radius-sm);background:var(--bg-white);color:var(--text);resize:vertical;outline:none;box-sizing:border-box;"></textarea>
+
+              <div id="promptEditOk" style="display:none;margin-top:8px;display:none;">
+                <button class="btn btn-primary btn-sm" id="btnPromptOk">&#10003; OK — Apply Changes</button>
+                <button class="btn btn-ghost btn-sm" id="btnPromptCancelEdit" style="margin-left:6px;">Cancel</button>
+              </div>
+
+              <!-- Refinement box — CORLO Prompt tab only -->
+              <div class="refinement-box" id="refinementBox">
+                <div class="refinement-box-title">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Not happy with the prompt? Ask to revise it
+                </div>
+                <textarea class="refinement-input" id="refinementInput" placeholder="e.g. Make it shorter and more formal… or Focus more on risk analysis… or Add a section on budget considerations…"></textarea>
+                <div class="refinement-actions">
+                  <button class="btn btn-primary btn-sm" id="btnRefine">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    Revise Prompt
+                  </button>
+                  <span id="refineSpinner" style="display:none" class="char-count">Revising…</span>
+                </div>
+              </div>
+
+              <!-- Feedback — CORLO Prompt tab only -->
+              <div class="feedback-row">
+                <span class="feedback-label">Rate this result:</span>
+                <div class="stars" id="feedbackStars">
+                  <button class="star" data-rating="1">★</button>
+                  <button class="star" data-rating="2">★</button>
+                  <button class="star" data-rating="3">★</button>
+                  <button class="star" data-rating="4">★</button>
+                  <button class="star" data-rating="5">★</button>
+                </div>
+                <div class="feedback-ml">
+                  <button class="btn btn-ghost btn-sm" id="btnNewPrompt">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+                    New
+                  </button>
+                  <button class="btn btn-ghost btn-sm" id="btnCopyOutput">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                    Copy
+                  </button>
+                </div>
+              </div>
+            </div>
+
+<div class="output-panel" id="out-policies">
+  <div class="output-content html-content" id="resultPolicies"></div>
+</div>
+
+            </div>
+          </div>
+        </div>
+      </div><!-- /right col -->
+    </div><!-- /home-layout -->
+  </section>
+
+  <!-- ── HISTORY PAGE ── -->
+  <section class="page" id="page-history">
+    <div class="page-header">
+      <div>
+        <h2 class="page-title">Run History</h2>
+        <p class="page-subtitle">All previous orchestration runs with full audit logs.</p>
+      </div>
+      <button class="btn btn-secondary" id="btnRefreshHistory">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+        Refresh
+      </button>
+    </div>
+    <div class="history-list" id="historyList">
+      <div class="empty-state">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <p>No history yet.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── AI TOOLS PAGE ── -->
+  <section class="page" id="page-tools">
+    <div class="page-header">
+      <div>
+        <h2 class="page-title">AI Tools Registry</h2>
+        <p class="page-subtitle">All available enterprise AI tools and their capabilities.</p>
+      </div>
+    </div>
+    <div class="tools-grid" id="toolsGrid">
+      <div class="loading-spinner"><div class="spinner"></div></div>
+    </div>
+  </section>
+
+  <!-- ── ANALYTICS PAGE ── -->
+  <section class="page" id="page-analytics">
+    <div class="page-header">
+      <div>
+        <h2 class="page-title">Analytics</h2>
+        <p class="page-subtitle">Usage insights and performance metrics.</p>
+      </div>
+      <button class="btn btn-secondary" id="btnRefreshAnalytics">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+        Refresh
+      </button>
+    </div>
+    <div id="analyticsContent">
+      <div class="loading-spinner"><div class="spinner"></div></div>
+    </div>
+  </section>
+
+  <!-- ── POLICIES PAGE ── -->
+  <section class="page" id="page-policies">
+    <div class="page-header">
+      <div>
+        <h2 class="page-title">Company Policies</h2>
+        <p class="page-subtitle">Upload policy documents to guide AI tool recommendations and compliance.</p>
+      </div>
+    </div>
+    <div class="policies-layout">
+      <div class="upload-card">
+        <div class="upload-zone" id="uploadZone">
+          <div class="upload-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <p class="upload-title">Drop your policy file here</p>
+          <p class="upload-hint">Supports .pdf and .docx files</p>
+          <input type="file" id="policyFileInput" accept=".pdf,.docx" style="display:none"/>
+          <button class="btn btn-secondary btn-sm" id="btnBrowseFile">Browse Files</button>
+        </div>
+        <div id="uploadStatus" style="margin-top:12px;"></div>
+      </div>
+      <div class="policies-list-card">
+        <div class="card-header-row">
+          <span class="card-title">Indexed Policies</span>
+          <button class="btn btn-ghost btn-sm" id="btnRefreshPolicies">Refresh</button>
+        </div>
+        <div id="policiesList">
+          <div class="loading-spinner"><div class="spinner"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PROMPT LIBRARY PAGE ── -->
+  <section class="page" id="page-promptlibrary">
+    <div class="promptlib-page">
+      <div class="promptlib-header">
+        <div>
+          <h2>Prompt Library</h2>
+          <p class="promptlib-subtitle">Ready-to-use prompt templates. Click any card or the Copy button to copy instantly.</p>
+        </div>
+        <div>
+          <input type="search" id="promptLibSearch" class="promptlib-search"
+            placeholder="Search prompts…" aria-label="Search prompts">
+        </div>
+      </div>
+
+      <div class="promptlib-layout">
+        <nav class="promptlib-sidenav" aria-label="Prompt categories">
+          <button class="promptlib-navbtn active" data-pltab="role-specific"><span class="pln-icon">👤</span> Role-Specific</button>
+          <button class="promptlib-navbtn" data-pltab="thinking-partner"><span class="pln-icon">🧠</span> Thinking Partner</button>
+          <button class="promptlib-navbtn" data-pltab="research"><span class="pln-icon">🔍</span> Research</button>
+          <button class="promptlib-navbtn" data-pltab="quick-actions"><span class="pln-icon">⚡</span> Quick Actions</button>
+          <button class="promptlib-navbtn" data-pltab="my-favorites"><span class="pln-icon">⭐</span> My Favorites</button>
+        </nav>
+
+        <div class="promptlib-content">
+
+          <div class="pltab-content active" id="pltab-role-specific">
+            <div class="pltab-topbar">
+              <span class="pltab-title">Role-Specific Prompts</span>
+              <select id="plRoleSelect" class="pl-role-select">
+                <option value="consultant">Consultant / Manager</option>
+                <option value="executive">Executive / Director</option>
+                <option value="developer">Developer / Technical</option>
+                <option value="analyst">Business Analyst</option>
+                <option value="sales">Sales / BD</option>
+                <option value="marketing">Marketing / Communications</option>
+                <option value="hr">HR / People Operations</option>
+                <option value="finance">Finance / Accounting</option>
+              </select>
+            </div>
+            <div class="pl-grid" id="plRoleGrid"></div>
+          </div>
+
+          <div class="pltab-content" id="pltab-thinking-partner">
+            <div class="pltab-topbar">
+              <span class="pltab-title">Thinking Partner Prompts</span>
+              <span class="pltab-desc">Use these to challenge, refine, and sharpen your thinking.</span>
+            </div>
+            <div class="pl-grid" id="plThinkingGrid"></div>
+          </div>
+
+          <div class="pltab-content" id="pltab-research">
+            <div class="pltab-topbar">
+              <span class="pltab-title">Research Prompts</span>
+              <span class="pltab-desc">Structured prompts for deep research, analysis and benchmarking.</span>
+            </div>
+            <div class="pl-grid" id="plResearchGrid"></div>
+          </div>
+
+          <div class="pltab-content" id="pltab-quick-actions">
+            <div class="pltab-topbar">
+              <span class="pltab-title">Quick Actions</span>
+              <span class="pltab-desc">One-click prompts for the most common everyday tasks.</span>
+            </div>
+            <div class="pl-quick-grid" id="plQuickGrid"></div>
+          </div>
+
+          <div class="pltab-content" id="pltab-my-favorites">
+            <div class="pltab-topbar">
+              <span class="pltab-title">⭐ My Favorites</span>
+              <span class="pltab-desc">Prompts you've saved for quick access.</span>
+            </div>
+            <div class="pl-grid" id="plFavoritesGrid"></div>
+            <div id="plFavoritesEmpty" class="pl-empty hidden">
+              <div class="pl-empty-icon">⭐</div>
+              <h3>No favorites yet</h3>
+              <p>Click the <strong>☆ Save</strong> button on any prompt card to add it here.</p>
+            </div>
+          </div>
+
+          <div id="plSearchEmpty" class="pl-empty hidden">
+            <div class="pl-empty-icon">🔎</div>
+            <h3>No prompts match your search</h3>
+            <p>Try different keywords or clear the search box.</p>
+          </div>
+
+        </div><!-- /.promptlib-content -->
+      </div><!-- /.promptlib-layout -->
+    </div><!-- /.promptlib-page -->
+  </section>
+
+</main>
+
+<!-- LOG MODAL -->
+<div class="modal-overlay" id="logModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Run Log</h3>
+      <button class="modal-close" id="btnCloseModal">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" id="logModalBody"></div>
+  </div>
+</div>
+
+<!-- EDIT LOG MODAL -->
+<!-- <div class="modal-overlay" id="editLogModal">
+  <div class="modal" style="max-width:680px;">
+    <div class="modal-header">
+      <h3 class="modal-title">&#9998; Edit Log Entry</h3>
+      <button class="modal-close" onclick="closeEditModal()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" id="editLogModalBody"></div>
+    <div class="modal-footer" style="padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;">
+      <button class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+      <button class="btn btn-primary" id="btnConfirmEdit" onclick="saveEditedLog()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Confirm Changes
+      </button>
+    </div>
+  </div>
+</div> -->
+
+<!-- TOAST -->
+<div class="toast-container" id="toastContainer"></div>
+
+
+
+
+
+
+
+
+
+<!-- ══════════════════════════════════════
+     FILE UPLOAD MODAL
+══════════════════════════════════════ -->
+<div class="fu-overlay" id="fuOverlay"></div>
+<div class="fu-modal" id="fuModal">
+  <div class="fu-modal-header">
+    <span>📂 Upload AI Tools Registry</span>
+    <button class="fu-close-btn" id="fuCloseBtn">✕</button>
+  </div>
+  <div class="fu-modal-body">
+    <div class="fu-drop-zone" id="fuDropZone">
+      <div class="fu-drop-icon">📊</div>
+      <div class="fu-drop-title">Drop your Excel file here</div>
+      <div class="fu-drop-sub">or click to browse — .xlsx files only</div>
+      <input type="file" id="fuFileInput" accept=".xlsx" hidden />
+    </div>
+    <div class="fu-file-info" id="fuFileInfo" style="display:none">
+      <span class="fu-file-name" id="fuFileName"></span>
+      <button class="fu-clear-btn" id="fuClearBtn">✕</button>
+    </div>
+    <div class="fu-required-note">
+      Required columns: <code>tool_name</code>, <code>description</code>, <code>best_for</code>,
+      <code>not_for</code>, <code>category</code>, <code>url</code>
+    </div>
+  </div>
+  <div class="fu-modal-footer">
+    <button class="fu-cancel-btn" id="fuCancelBtn">Cancel</button>
+    <button class="fu-upload-btn" id="fuUploadBtn" disabled>Upload & Apply</button>
+  </div>
+  <div class="fu-status" id="fuStatus" style="display:none"></div>
+</div>
+
+<!-- ══════════════════════════════════════
+     POLICY UPLOAD MODAL
+══════════════════════════════════════ -->
+<div class="fu-overlay" id="puOverlay"></div>
+<div class="fu-modal" id="puModal">
+  <div class="fu-modal-header">
+    <span>📋 Upload Policy Document</span>
+    <button class="fu-close-btn" id="puCloseBtn">✕</button>
+  </div>
+  <div class="fu-modal-body">
+    <div class="fu-drop-zone" id="puDropZone">
+      <div class="fu-drop-icon">📄</div>
+      <div class="fu-drop-title">Drop your policy document here</div>
+      <div class="fu-drop-sub">or click to browse — .pdf or .docx files accepted</div>
+      <input type="file" id="puFileInput" accept=".pdf,.docx" hidden />
+    </div>
+    <div class="fu-file-info" id="puFileInfo" style="display:none">
+      <span class="fu-file-name" id="puFileName"></span>
+      <button class="fu-clear-btn" id="puClearBtn">✕</button>
+    </div>
+    <div class="fu-required-note">
+      Uploaded documents will be indexed and used to guide AI responses and compliance checks.<br/>
+      Supported formats: <code>.pdf</code>, <code>.docx</code>
+    </div>
+  </div>
+  <div class="fu-modal-footer">
+    <button class="fu-cancel-btn" id="puCancelBtn">Cancel</button>
+    <button class="fu-upload-btn" id="puUploadBtn" disabled>Upload & Index</button>
+  </div>
+  <div class="fu-status" id="puStatus" style="display:none"></div>
+</div>
+
+
+
+<!-- SCENARIO GENERATE MODAL -->
+<div class="modal-overlay" id="scenarioGenModal">
+  <div class="modal" style="max-width:720px;">
+    <div class="modal-header">
+      <h3 class="modal-title">⚡ Review & Edit Before Generate</h3>
+      <button class="modal-close" id="btnCloseScenarioGenModal" aria-label="Close">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <p style="margin:0 0 10px;color:var(--text3);font-size:13px;line-height:1.4;">
+        This template may include placeholders like <code>[topic]</code>. Update anything you want, then generate.
+      </p>
+
+      <div class="row2" style="margin-bottom:10px;">
+        <div>
+          <label class="field-label" for="scenarioRole">Role</label>
+          <select id="scenarioRole"></select>
+        </div>
+        <div>
+          <label class="field-label" for="scenarioTaskType">Task Type</label>
+          <select id="scenarioTaskType"></select>
+        </div>
+      </div>
+
+      <label class="field-label" for="scenarioDesc">Task Description</label>
+      <textarea id="scenarioDesc" rows="8" style="width:100%;"></textarea>
+
+      <div id="scenarioPlaceholderHint"
+           style="display:none;margin-top:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--bg-secondary);font-size:13px;color:var(--text2);">
+      </div>
+    </div>
+
+    <div class="modal-footer" style="padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;">
+      <button class="btn btn-secondary" id="btnCancelScenarioGen">Cancel</button>
+      <button class="btn btn-primary" id="btnConfirmScenarioGen">
+        Generate Response
+      </button>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- ══ JS FILES ══
+     Load order matters:
+     1. ui.js      — shared helpers (escapeHtml, showToast, goToStep, etc.)
+     2. app.js     — main app logic (uses helpers from ui.js + calls API)
+     3. promptlibrary.js — standalone prompt library
+-->
+<script src="/static/js/ui.js"></script>
+<script src="/static/js/app.js"></script>
+<script src="/static/js/promptlib.js"></script>
+<script src="/static/js/file_upload.js"></script>
+
+</body>
+</html>
